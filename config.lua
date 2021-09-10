@@ -23,11 +23,6 @@ lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- which key
-lvim.builtin.which_key.setup.plugins.marks = false
-lvim.builtin.which_key.setup.plugins.registers = false
-lvim.builtin.which_key.setup.plugins.presets.motions = true
-lvim.builtin.which_key.setup.plugins.presets.text_objects = true
-lvim.builtin.which_key.setup.layout.height = { min = 1, max = 10 }
 lvim.builtin.which_key.setup.window = { padding = { 0, 0, 0, 0 } }
 lvim.builtin.which_key.setup.layout = {
   height = { min = 1, max = 10 }, -- min and max height of the columns
@@ -36,9 +31,9 @@ lvim.builtin.which_key.setup.layout = {
 }
 
 lvim.builtin.which_key.mappings.b.c = lvim.builtin.which_key.mappings.c
-lvim.builtin.which_key.mappings.s.c = { "<cmd>edit ~/.config/lvim/config.lua<cr>", "Edit config" }
+lvim.builtin.which_key.mappings.s.c = lvim.builtin.which_key.mappings.L.c
 lvim.builtin.which_key.mappings.s.p = { "<cmd>Telescope projects<cr>", "Find project" }
-lvim.builtin.which_key.mappings.s.s = { 
+lvim.builtin.which_key.mappings.s.s = {
   "<cmd>lua require('telescope.builtin.internal').colorscheme({enable_preview = true})<cr>",
   "Colorscheme"
 }
@@ -52,7 +47,6 @@ lvim.builtin.which_key.mappings["r"] = {
 }
 lvim.builtin.which_key.mappings.c = nil
 lvim.builtin.which_key.mappings.L.c = nil
-lvim.builtin.which_key.mappings.s.p = nil
 
 -- additional plugins
 lvim.plugins = {
@@ -77,12 +71,12 @@ lvim.plugins = {
     config = function()
     require("neoscroll").setup({
         mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
-        hide_cursor = true, -- Hide cursor while scrolling
-        stop_eof = true, -- Stop at <EOF> when scrolling downwards
-        use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
-        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
-        cursor_scrolls_alone = false, -- The cursor will keep on scrolling even if the window cannot scroll further
-        easing_function = nil, -- Default easing function
+        hide_cursor = true,
+        stop_eof = true,
+        use_local_scrolloff = false,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = false,
+        easing_function = nil,
     })
     end
   },
@@ -141,4 +135,4 @@ lvim.builtin.dashboard.custom_section.a.description = { "  Find File         
 lvim.builtin.dashboard.custom_section.b.description = { "  Recent Projects                SPC s p" }
 lvim.builtin.dashboard.custom_section.c.description = { "  Recently Opened Files          SPC s r" }
 lvim.builtin.dashboard.custom_section.d.description = { "  Find Word                      SPC s t" }
-lvim.builtin.dashboard.custom_section.e.description = { "  Open Private Configuration     SPC l c" }
+lvim.builtin.dashboard.custom_section.e.description = { "  Open Private Configuration     SPC s c" }
