@@ -2,7 +2,7 @@
 lvim.format_on_save = false
 lvim.log.level = "warn"
 lvim.lint_on_save = true
-lvim.colorscheme = "doom-one"
+lvim.colorscheme = "onedarker"
 lvim.lsp.diagnostics.virtual_text = false
 vim.opt.relativenumber = true
 vim.opt.timeoutlen = 500
@@ -25,7 +25,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- which key
 lvim.builtin.which_key.setup.window = { padding = { 0, 0, 0, 0 } }
 lvim.builtin.which_key.setup.layout = {
-  height = { min = 1, max = 10 }, -- min and max height of the columns
+  height = { min = 1, max = 10 },
   spacing = 3,
   align = "left",
 }
@@ -81,6 +81,19 @@ lvim.plugins = {
     end
   },
   {
+    "tzachar/cmp-tabnine",
+    config = function()
+      local tabnine = require "cmp_tabnine.config"
+      tabnine:setup {
+        max_lines = 1000,
+        max_num_results = 20,
+        sort = true,
+      }
+    end,
+    run = "./install.sh",
+    requires = "hrsh7th/nvim-cmp"
+  },
+  {
     "windwp/nvim-spectre",
     event = "BufRead",
     config = function()
@@ -107,32 +120,27 @@ lvim.plugins = {
 }
 
 -- dashboard
-lvim.builtin.dashboard.custom_header = {
-"                                                                              ",
-        "=================     ===============     ===============   ========  ========",
-        "\\\\ . . . . . . .\\\\   //. . . . . . .\\\\   //. . . . . . .\\\\  \\\\. . .\\\\// . . //",
-        "||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\\/ . . .||",
-        "|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . ||",
-        "||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .||",
-        "|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\\ . . . . ||",
-        "||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\\_ . .|. .||",
-        "|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\\ `-_/| . ||",
-        "||_-' ||  .|/    || ||    \\|.  || `-_|| ||_-' ||  .|/    || ||   | \\  / |-_.||",
-        "||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \\  / |  `||",
-        "||    `'         || ||         `'    || ||    `'         || ||   | \\  / |   ||",
-        "||            .===' `===.         .==='.`===.         .===' /==. |  \\/  |   ||",
-        "||         .=='   \\_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \\/  |   ||",
-        "||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \\/  |   ||",
-        "||   .=='    _-'          `-__\\._-'         `-_./__-'         `' |. /|  |   ||",
-        "||.=='    _-'                                                     `' |  /==.||",
-        "=='    _-'                        N E O V I M                         \\/   `==",
-        "\\   _-'                                                                `-_   /",
-        " `''                                                                      ``'  ",
-        "                                                                               ",
+lvim.builtin.dashboard.custom_section.a = {
+  description = { "  Reload last session            SPC s f" },
+  command = "lua require('persistence').load({ last = true })"
 }
-
-lvim.builtin.dashboard.custom_section.a.description = { "  Find File                      SPC s f" }
-lvim.builtin.dashboard.custom_section.b.description = { "  Recent Projects                SPC s p" }
-lvim.builtin.dashboard.custom_section.c.description = { "  Recently Opened Files          SPC s r" }
-lvim.builtin.dashboard.custom_section.d.description = { "  Find Word                      SPC s t" }
-lvim.builtin.dashboard.custom_section.e.description = { "  Open Private Configuration     SPC s c" }
+lvim.builtin.dashboard.custom_section.b = {
+  description = { "  Find File                      SPC s f" },
+  command = "Telescope find_files"
+}
+lvim.builtin.dashboard.custom_section.c = {
+  description = { "  Open project                   SPC s p" },
+  command = "Telescope projects"
+}
+lvim.builtin.dashboard.custom_section.d = {
+  description = { "  Recently opened files          SPC s r" },
+  command = "Telescope oldfiles"
+}
+lvim.builtin.dashboard.custom_section.e = {
+  description = { "  Find word                      SPC s t" },
+  command = "Telescope live_grep"
+}
+lvim.builtin.dashboard.custom_section.f = {
+  description = { "  Open private configuration     SPC s c" },
+  command =  ":e " .. "~/.config/lvim/config.lua"
+}
