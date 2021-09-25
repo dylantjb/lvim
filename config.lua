@@ -1,21 +1,24 @@
 -- general
-lvim.format_on_save = false
 lvim.log.level = "warn"
-lvim.lint_on_save = true
 lvim.colorscheme = "onedarker"
-lvim.lsp.diagnostics.virtual_text = false
-vim.opt.relativenumber = true
-vim.opt.timeoutlen = 500
+lvim.format_on_save = false
+lvim.lint_on_save = true
+lvim.keys.normal_mode["<Tab>"] = ":bnext<CR>"
+lvim.keys.normal_mode["<C-Tab>"] = ":bprevious<CR>"
 
 -- python
 lvim.lang.python.formatters = { { exe = "black" }, { exe = "isort" } }
 lvim.lang.python.linters = { { exe = "flake8" } }
 
 -- options
+vim.opt.timeoutlen = 500
+vim.opt.relativenumber = true
 lvim.builtin.dashboard.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
+lvim.builtin.nvimtree.hide_dotfiles = 0
 lvim.builtin.nvimtree.show_icons.git = 1
+lvim.lsp.diagnostics.virtual_text = false
 
 -- treesitter
 lvim.builtin.treesitter.ensure_installed = "maintained"
@@ -29,9 +32,7 @@ lvim.builtin.which_key.setup.layout = {
   spacing = 3,
   align = "left",
 }
-
-lvim.builtin.which_key.mappings.b.c = lvim.builtin.which_key.mappings.c
-lvim.builtin.which_key.mappings.s.c = lvim.builtin.which_key.mappings.L.c
+lvim.builtin.which_key.mappings.s.R = { "lua require('persistence').load({ last = true })", "Restore session"}
 lvim.builtin.which_key.mappings.s.p = { "<cmd>Telescope projects<cr>", "Find project" }
 lvim.builtin.which_key.mappings.s.s = {
   "<cmd>lua require('telescope.builtin.internal').colorscheme({enable_preview = true})<cr>",
@@ -45,8 +46,6 @@ lvim.builtin.which_key.mappings["r"] = {
   w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
   f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Replace Buffer" },
 }
-lvim.builtin.which_key.mappings.c = nil
-lvim.builtin.which_key.mappings.L.c = nil
 
 -- additional plugins
 lvim.plugins = {
@@ -101,10 +100,6 @@ lvim.plugins = {
     end
   },
   {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
-  },
-  {
     "haorenW1025/floatLf-nvim",
     config = function()
       vim.g.floatLf_autoclose = 1
@@ -116,16 +111,34 @@ lvim.plugins = {
       vim.g.doom_one_telescope_highlights = true
       vim.g.doom_one_italic_comments = true
     end
-  }
+  },
+  {
+    "folke/persistence.nvim",
+    event = "VimEnter",
+    module = "persistence",
+    config = function()
+      require("persistence").setup {
+        dir = vim.fn.expand(vim.fn.stdpath "config" .. "/session/"),
+        options = { "buffers", "curdir", "tabpages", "winsize" }
+      }
+    end,
+  },
+  {
+    "Pocco81/AutoSave.nvim",
+    config = function()
+      require("autosave").setup()
+    end
+  },
+  { "folke/trouble.nvim", cmd = "TroubleToggle" }
 }
 
 -- dashboard
 lvim.builtin.dashboard.custom_section.a = {
-  description = { "  Reload last session            SPC s f" },
+  description = { "  Reload last session            SPC s R" },
   command = "lua require('persistence').load({ last = true })"
 }
 lvim.builtin.dashboard.custom_section.b = {
-  description = { "  Find File                      SPC s f" },
+  description = { "  Find file                      SPC s f" },
   command = "Telescope find_files"
 }
 lvim.builtin.dashboard.custom_section.c = {
@@ -141,6 +154,7 @@ lvim.builtin.dashboard.custom_section.e = {
   command = "Telescope live_grep"
 }
 lvim.builtin.dashboard.custom_section.f = {
-  description = { "  Open private configuration     SPC s c" },
+  description = { "  Open private configuration     SPC L c" },
   command =  ":e " .. "~/.config/lvim/config.lua"
 }
+
