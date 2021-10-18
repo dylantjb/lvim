@@ -3,12 +3,14 @@ lvim.log.level = "warn"
 lvim.colorscheme = "onedarker"
 lvim.format_on_save = false
 lvim.lint_on_save = true
-lvim.keys.normal_mode["<Tab>"] = ":bnext<CR>"
-lvim.keys.normal_mode["<C-Tab>"] = ":bprevious<CR>"
 
 -- python
 lvim.lang.python.formatters = { { exe = "black" }, { exe = "isort" } }
-lvim.lang.python.linters = { { exe = "flake8" } }
+lvim.lang.python.linters = { { exe = "pylint" } }
+
+-- cpp
+lvim.lang.cpp.formatters = { { exe = "clang-format" } }
+lvim.lang.cpp.linters = { { exe = "cppcheck" } }
 
 -- options
 vim.opt.timeoutlen = 500
@@ -38,8 +40,6 @@ lvim.builtin.which_key.mappings.s.s = {
   "<cmd>lua require('telescope.builtin.internal').colorscheme({enable_preview = true})<cr>",
   "Colorscheme"
 }
-lvim.builtin.which_key.mappings.l.d = { "<cmd>TroubleToggle<cr>", "Diagnostics" }
-lvim.builtin.which_key.mappings.l.R = { "<cmd>TroubleToggle lsp_references<cr>", "References" }
 lvim.builtin.which_key.mappings["r"] = {
   name = "Replace",
   r = { "<cmd>lua require('spectre').open()<cr>", "Replace" },
@@ -69,7 +69,7 @@ lvim.plugins = {
     event = "BufRead",
     config = function()
     require("neoscroll").setup({
-        mappings = { "<C-u>", "<C-d>", "<C-b>", "<C-f>", "<C-y>", "<C-e>", "zt", "zz", "zb" },
+        mappings = { "<C-u>", "<C-d>", "<C-b>", "zt", "zz", "zb" },
         hide_cursor = true,
         stop_eof = true,
         use_local_scrolloff = false,
@@ -100,19 +100,6 @@ lvim.plugins = {
     end
   },
   {
-    "haorenW1025/floatLf-nvim",
-    config = function()
-      vim.g.floatLf_autoclose = 1
-    end
-  },
-  {
-    "NTBBloodbath/doom-one.nvim",
-    config = function()
-      vim.g.doom_one_telescope_highlights = true
-      vim.g.doom_one_italic_comments = true
-    end
-  },
-  {
     "folke/persistence.nvim",
     event = "VimEnter",
     module = "persistence",
@@ -129,7 +116,6 @@ lvim.plugins = {
       require("autosave").setup()
     end
   },
-  { "folke/trouble.nvim", cmd = "TroubleToggle" }
 }
 
 -- dashboard
