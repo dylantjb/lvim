@@ -4,13 +4,19 @@ lvim.colorscheme = "onedarker"
 lvim.format_on_save = false
 lvim.lint_on_save = true
 
--- python
-lvim.lang.python.formatters = { { exe = "black" }, { exe = "isort" } }
-lvim.lang.python.linters = { { exe = "pylint" } }
+local formatters = require "lvim.lsp.null-ls.formatters"
+local linters = require "lvim.lsp.null-ls.linters"
 
--- cpp
-lvim.lang.cpp.formatters = { { exe = "clang-format" } }
-lvim.lang.cpp.linters = { { exe = "cppcheck" } }
+formatters.setup {
+  { exe = "black", filetypes = { "python" } },
+  { exe = "isort", filetypes = { "python" } },
+  { exe = "scalafmt", filetypes = { "scala" } },
+  { exe = "clang-format", filetypes = { "cpp", "c" } },
+}
+linters.setup {
+  { exe = "pylint", filetypes = { "python" } },
+  { exe = "cppcheck", filetypes = { "cpp", "c" } },
+}
 
 -- options
 vim.opt.timeoutlen = 500
@@ -18,13 +24,12 @@ vim.opt.relativenumber = true
 lvim.builtin.dashboard.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.side = "left"
-lvim.builtin.nvimtree.hide_dotfiles = 0
+lvim.builtin.nvimtree.setup.filters.dotfiles = true
 lvim.builtin.nvimtree.show_icons.git = 1
 lvim.lsp.diagnostics.virtual_text = false
 
 -- treesitter
-lvim.builtin.treesitter.ensure_installed = "maintained"
-lvim.builtin.treesitter.ignore_install = { "haskell" }
+lvim.builtin.treesitter.ensure_installed = { "python", "java", "cpp", "c", "scala" }
 lvim.builtin.treesitter.highlight.enabled = true
 
 -- which key
@@ -34,6 +39,7 @@ lvim.builtin.which_key.setup.layout = {
   spacing = 3,
   align = "left",
 }
+lvim.builtin.which_key.mappings.w =   { "<cmd>:execute ':silent w !sudo tee % > /dev/null' | :edit!<cr>", "Save with sudo" }
 lvim.builtin.which_key.mappings.s.R = { "lua require('persistence').load({ last = true })", "Restore session"}
 lvim.builtin.which_key.mappings.s.p = { "<cmd>Telescope projects<cr>", "Find project" }
 lvim.builtin.which_key.mappings.s.s = {
@@ -116,7 +122,17 @@ lvim.plugins = {
       require("autosave").setup()
     end
   },
+  -- {
+  --   "scalameta/nvim-metals",
+  --   config = function()
+  --     require("user.metals").config()
+  --   end,
+  -- },
 }
+
+-- lvim.autocommands.custom_groups = {
+--   { "FileType", "scala,sbt", "lua require('user.metals').config()" }
+-- }
 
 -- dashboard
 lvim.builtin.dashboard.custom_section.a = {
